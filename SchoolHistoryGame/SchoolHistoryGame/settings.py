@@ -25,8 +25,15 @@ SECRET_KEY = 'django-insecure-w&taol8-g%))%!s4=v_4(e#s*mx@okg)^o438t5itz34u842&-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = [
+    'https://vmi957205.contaboserver.net',
+    'http://vmi957205.contaboserver.net',
+    'http://0.0.0.0',
+    'https://orxid.in.ua',
+    'http://orxid.in.ua',
+    'http://127.0.0.1'
+]
 
 # Application definition
 
@@ -37,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'main'
 ]
 
@@ -51,6 +59,11 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'SchoolHistoryGame.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10
+}
 
 TEMPLATES = [
     {
@@ -116,9 +129,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'
-
+#STATIC_URL = 'static/'
+STATIC_URL = 'https://orxid.in.ua/SchoolHistoryGameStatic/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_ROOT = "c:/d/temp/staticSchool"
