@@ -4,12 +4,12 @@ from .models import HistoryList,Subtopics,SubtopicsContent,MainContent
 class HistoryListSerializers(serializers.ModelSerializer):
     class Meta:
         model = HistoryList
-        fields = ['date', 'text']
+        fields = ['pk','date', 'text']
 
 class SubtopicsSerializers(serializers.ModelSerializer):
     class Meta:
         model = Subtopics
-        fields = ['history_list','title']
+        fields = ['history_list','pk','title']
 
 class SubtopicsContentsSerializers(serializers.ModelSerializer):
     class Meta:
