@@ -1,37 +1,46 @@
 from django.contrib import admin
-#import nested_admin
 from .models import HistoryList,Subtopics,SubtopicsContent,MainContent
+from nested_inline.admin import NestedStackedInline, NestedModelAdmin
 
 
-class AdminSubtopicsInline(admin.StackedInline):
-    model = Subtopics
-    extra = 0
-
-class AdminSubtopicsContentInline(admin.StackedInline):
+class AdminSubtopicsContentInline(NestedStackedInline):
     model = SubtopicsContent
-    extra = 0
-class AdminSubtopics(admin.ModelAdmin):
+    extra = 1
+    fk_name = 'subtopics'
+
+class AdminSubtopicsInline(NestedStackedInline):
+    model = Subtopics
+    extra = 1
+    fk_name = 'history_list'
     inlines = [AdminSubtopicsContentInline]
-    list_display = ('pk', 'title','history_list')
-
-class AdminSubtopicsContent(admin.ModelAdmin):
-
-    list_display = ('pk','type', 'subtopics')
-    list_filter = ("subtopics",)
 
 
-class AdminMainContenInline(admin.StackedInline):
+
+# class AdminSubtopics(admin.ModelAdmin):
+#     inlines = [AdminSubtopicsContentInline]
+#     list_display = ('pk', 'title','history_list')
+#class AdminMainContent(admin.ModelAdmin):
+#      list_display = ('pk','type')
+
+# class AdminSubtopicsContent(admin.ModelAdmin):
+#
+#     list_display = ('pk','type', 'subtopics')
+#     list_filter = ("subtopics",)
+
+
+class AdminMainContenInline(NestedStackedInline):
     model = MainContent
-    extra = 0
-class AdminMainContent(admin.ModelAdmin):
-      list_display = ('pk','type')
+    extra = 1
+    fk_name = 'history_list'
 
-class AdminHistory(admin.ModelAdmin):
+
+class AdminHistory(NestedModelAdmin):
+    save_on_top = True
     inlines = [AdminMainContenInline,AdminSubtopicsInline]
-    list_display = ('pk','date', 'text')
+    list_display = ('date', 'text','pk')
 
 admin.site.register(HistoryList,AdminHistory)
-admin.site.register(Subtopics,AdminSubtopics)
+#admin.site.register(Subtopics,AdminSubtopics)
 
 
 
