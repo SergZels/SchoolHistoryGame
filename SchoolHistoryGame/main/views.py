@@ -5,7 +5,15 @@ from django.contrib.auth.models import Group, User
 from rest_framework import permissions, viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from datetime import datetime
 from .serializers import HistoryListSerializers,SubtopicsSerializers,SubtopicsContentsSerializers,MainContentsSerializers
+import logging
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+
+logger = logging.getLogger(__name__)
+loggerINFO = logging.getLogger('django2')
 def index(request):
     queryset = HistoryList.objects.all()
     data = list(queryset.values())
@@ -37,9 +45,22 @@ class SubtopicsContentViewSet(viewsets.ModelViewSet):
 class MainContentViewSet(viewsets.ModelViewSet):
     serializer_class = MainContentsSerializers
     permission_classes = [permissions.AllowAny]
+
+ #   @method_decorator(cache_page(60))  # кешує на 60 секунд
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
     def get_queryset(self):
+        loggerINFO.info(f'{datetime.now()} MainContentViewSet ')
         id = self.kwargs['id']  # Отримуємо id з URL
+        # cache.set('my_key', 'my_value', timeout=3600)
+        #
+        # value = cache.get('my_key')
+        #
+        # if value is not None:
+        #     print(value)
+
         return MainContent.objects.filter(history_list=id)
+
 
 
 # class SubtContALL(APIView):
@@ -58,6 +79,7 @@ class SubtopicWithContent(APIView):
             }
             result_data.append(subtopic_dict)
 
+        loggerINFO.info(f'{datetime.now()} SubtopicWithContent {request.user.username}')
         return Response({'subtopics': result_data})
 
     def get_subtopic_content(self, subtopic):
