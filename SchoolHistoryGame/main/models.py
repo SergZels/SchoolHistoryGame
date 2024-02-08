@@ -8,7 +8,7 @@ class HistoryList (models.Model):
         return f'{self.pk} {self.text}'
 
 class MainContent (models.Model):
-    type = models.CharField(max_length=300, blank=True, choices=[('title','title'),('text','text')])
+    type = models.CharField(max_length=300, blank=True, choices=[('title','title'),('text','text')] )
     text = models.TextField()
     history_list = models.ForeignKey(HistoryList, on_delete=models.SET_NULL, null=True)
 
